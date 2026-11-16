@@ -2,9 +2,9 @@
 
 > **From the armature circuit and rotor dynamics to two equivalent mathematical models:** a **Transfer Function** and a **State-Space Representation**.
 
-**Study:** DC motor speed (not angular position) · **Model:** continuous-time, linear, armature-controlled DC motor · **MATLAB tools:** `tf`, `ss`, `freqresp` (Control System Toolbox).
+**Study:** DC motor speed (not angular position) · **Model:** continuous-time, linear, armature-controlled DC motor · **MATLAB tools:** `tf` and `ss` (Control System Toolbox).
 
-**Goal of this section:** derive the model from physics and verify that both representations describe the same input–output system. **Controller tuning, step-response plots, and performance requirements are intentionally deferred** to later sections.
+**Goal of this section:** derive the model from physics, build both representations in MATLAB, and convert between them. **Controller design, step-response plots, and performance requirements are intentionally deferred** to later sections.
 
 ## 1. Physical setup: what are we modeling?
 
@@ -43,15 +43,15 @@ We need two physical relationships that couple the subsystems:
 
 **Torque from armature current**
 
-$$
-\boxed{T(t)=K_t i(t)}
-$$
+```math
+T(t)=K_t i(t)
+```
 
 **Back EMF from shaft speed**
 
-$$
-\boxed{e(t)=K_e\omega(t)}
-$$
+```math
+e(t)=K_e\omega(t)
+```
 
 These are not independent inputs: generated torque drives the rotor, while rotating the rotor produces a back EMF that opposes the supply voltage.
 
@@ -68,31 +68,31 @@ flowchart LR
 
 ### 2.1 Mechanical equation — rotational Newton's law
 
-The rotor torque balances inertia and viscous friction:
+The rotor torque balances inertia and viscous friction (mechanical equation):
 
-$$
+```math
 J\ddot\theta(t)+b\dot\theta(t)=K_t i(t)
-$$
+```
 
 Because our **output is speed**, define $\omega(t)=\dot\theta(t)$, so $\dot\omega(t)=\ddot\theta(t)$:
 
-$$
-\boxed{J\dot\omega(t)+b\omega(t)=K_t i(t)} \tag{1}
-$$
+```math
+J\dot\omega(t)+b\omega(t)=K_t i(t)
+```
 
 ### 2.2 Electrical equation — Kirchhoff's Voltage Law
 
-The applied voltage is shared among the inductor, resistor, and back EMF:
+The applied voltage is shared among the inductor, resistor, and back EMF (electrical equation):
 
-$$
+```math
 V(t)=L\frac{di(t)}{dt}+Ri(t)+e(t)
-$$
+```
 
 Using $e(t)=K_e\omega(t)$:
 
-$$
-\boxed{L\dot i(t)+Ri(t)=V(t)-K_e\omega(t)} \tag{2}
-$$
+```math
+L\dot i(t)+Ri(t)=V(t)-K_e\omega(t)
+```
 
 We now have **two coupled first-order differential equations**, one mechanical and one electrical. We use the *same equations* in two different mathematical representations below.
 
@@ -102,51 +102,51 @@ We now have **two coupled first-order differential equations**, one mechanical a
 
 **Purpose:** obtain one input–output relationship, $P(s)=\Omega(s)/V(s)$, by eliminating the internal current $I(s)$.
 
-Assume zero initial conditions and take the Laplace transform of (1) and (2):
+Assume zero initial conditions and take the Laplace transform of the mechanical and electrical equations:
 
-$$
-(Js+b)\Omega(s)=K_t I(s) \tag{3}
-$$
+```math
+(Js+b)\Omega(s)=K_t I(s)
+```
 
-$$
-(Ls+R)I(s)=V(s)-K_e\Omega(s) \tag{4}
-$$
+```math
+(Ls+R)I(s)=V(s)-K_e\Omega(s)
+```
 
 **Step A — isolate the current** from the mechanical equation:
 
-$$
+```math
 I(s)=\frac{Js+b}{K_t}\Omega(s)
-$$
+```
 
 **Step B — substitute into the electrical equation:**
 
-$$
+```math
 (Ls+R)\frac{Js+b}{K_t}\Omega(s)=V(s)-K_e\Omega(s)
-$$
+```
 
 **Step C — collect the speed terms and divide by the input:**
 
-$$
-\boxed{P(s)=\frac{\Omega(s)}{V(s)}=\frac{K_t}{(Js+b)(Ls+R)+K_tK_e}} \tag{5}
-$$
+```math
+P(s)=\frac{\Omega(s)}{V(s)}=\frac{K_t}{(Js+b)(Ls+R)+K_tK_e}
+```
 
 For the tutorial assumption $K_t=K_e=K$:
 
-$$
-\boxed{P(s)=\frac{K}{(Js+b)(Ls+R)+K^2}}
-$$
+```math
+P(s)=\frac{K}{(Js+b)(Ls+R)+K^2}
+```
 
 Expand the denominator to see the system order:
 
-$$
+```math
 P(s)=\frac{K_t}{JL\,s^2+(JR+bL)s+(bR+K_tK_e)}
-$$
+```
 
 After inserting the example parameters:
 
-$$
-\boxed{P(s)=\frac{0.01}{0.005s^2+0.06s+0.1001}}
-$$
+```math
+P(s)=\frac{0.01}{0.005s^2+0.06s+0.1001}
+```
 
 This is a **second-order** transfer function from applied voltage to angular speed.
 
@@ -158,101 +158,135 @@ This is a **second-order** transfer function from applied voltage to angular spe
 
 **Purpose:** retain the system's internal dynamics rather than eliminating the current. The two energy-storage elements (rotor inertia $J$ and armature inductance $L$) motivate two independent physical states:
 
-$$
-\boxed{x_1(t)=\omega(t),\qquad x_2(t)=i(t)}
-$$
+```math
+x_1(t)=\omega(t),\qquad x_2(t)=i(t)
+```
 
-This choice is deliberate: **speed** is both the first state *and* our output; **current** is the second state. No new combined physical equation is needed—we rearrange the *same mechanical and electrical equations* (1)–(2).
+This choice is deliberate: **speed** is both the first state *and* our output; **current** is the second state. No new combined physical equation is needed—we rearrange the *same mechanical and electrical equations* from Section 2.
 
 ### 4.1 Isolate each state derivative
 
-Mechanical equation (1):
+Mechanical equation from Section 2.1:
 
-$$
+```math
 J\dot\omega+b\omega=K_t i
-$$
+```
 
-$$
-\boxed{\dot x_1=\dot\omega=-\frac{b}{J}x_1+\frac{K_t}{J}x_2} \tag{6}
-$$
+```math
+\dot x_1=\dot\omega=-\frac{b}{J}x_1+\frac{K_t}{J}x_2
+```
 
-Electrical equation (2):
+Electrical equation from Section 2.2:
 
-$$
+```math
 L\dot i+Ri=V-K_e\omega
-$$
+```
 
-$$
-\boxed{\dot x_2=\dot i=-\frac{K_e}{L}x_1-\frac{R}{L}x_2+\frac{1}{L}V} \tag{7}
-$$
+```math
+\dot x_2=\dot i=-\frac{K_e}{L}x_1-\frac{R}{L}x_2+\frac{1}{L}V
+```
 
 ### 4.2 Convert the two equations into matrices
 
-Write the standard form:
+The standard state-space equations are:
 
-$$
-\dot x(t)=Ax(t)+Bu(t),\qquad y(t)=Cx(t)+Du(t)
-$$
+```math
+\dot{\mathbf{x}}(t)=A\mathbf{x}(t)+Bu(t)
+```
 
-where $u(t)=V(t)$, $x(t)=[\omega(t)\ \ i(t)]^T$, and $y(t)=\omega(t)$:
+```math
+y(t)=C\mathbf{x}(t)+Du(t)
+```
 
-$$
-\boxed{
-\begin{bmatrix}\dot\omega\\\dot i\end{bmatrix}
+We choose the state vector, input, and output as follows:
+
+```math
+\mathbf{x}(t)=\begin{bmatrix}\omega(t)\\i(t)\end{bmatrix},\qquad
+u(t)=V(t),\qquad y(t)=\omega(t)
+```
+
+**State equation — combine the two derivative equations from Section 4.1:**
+
+```math
+\begin{bmatrix}
+\dot{\omega}\\
+\dot{i}
+\end{bmatrix}
 =
-\underbrace{\begin{bmatrix}-b/J & K_t/J\\-K_e/L & -R/L\end{bmatrix}}_{A}
+\begin{bmatrix}
+-\frac{b}{J} & \frac{K_t}{J}\\
+-\frac{K_e}{L} & -\frac{R}{L}
+\end{bmatrix}
 \begin{bmatrix}\omega\\i\end{bmatrix}
 +
-\underbrace{\begin{bmatrix}0\\1/L\end{bmatrix}}_{B}V
-} \tag{8}
-$$
+\begin{bmatrix}0\\\frac{1}{L}\end{bmatrix}V
+```
 
-**Output equation:** we want only the first state, speed, so $C=[1\ \ 0]$. The applied voltage does not instantaneously appear in the chosen output, so $D=0$:
+So the **A** matrix describes how the states affect one another, and **B** describes how the applied voltage enters the state equations:
 
-$$
-\boxed{y=\underbrace{\begin{bmatrix}1&0\end{bmatrix}}_C\begin{bmatrix}\omega\\i\end{bmatrix}+\underbrace{0}_D V} \tag{9}
-$$
+```math
+A=\begin{bmatrix}
+-\frac{b}{J} & \frac{K_t}{J}\\
+-\frac{K_e}{L} & -\frac{R}{L}
+\end{bmatrix}
+\qquad
+B=\begin{bmatrix}0\\\frac{1}{L}\end{bmatrix}
+```
 
-With the numerical parameters:
+**Output equation — select only angular speed:**
 
-$$
-\boxed{
-A=\begin{bmatrix}-10&1\\-0.02&-2\end{bmatrix},\quad
-B=\begin{bmatrix}0\\2\end{bmatrix},\quad
-C=\begin{bmatrix}1&0\end{bmatrix},\quad D=0
-}
-$$
+Because the output is the first state, $y=\omega$, we choose **C** to select speed and **D** to be zero (no direct voltage-to-speed feedthrough):
 
-**MATLAB:** `motor_ss = ss(A,B,C,D);`
+```math
+y=\begin{bmatrix}1 & 0\end{bmatrix}
+\begin{bmatrix}\omega\\i\end{bmatrix}+0\,V
+```
+
+```math
+C=\begin{bmatrix}1 & 0\end{bmatrix},\qquad D=0
+```
+
+With the numerical motor parameters:
+
+```math
+A=\begin{bmatrix}-10&1\\-0.02&-2\end{bmatrix}
+```
+
+```math
+B=\begin{bmatrix}0\\2\end{bmatrix},\qquad
+C=\begin{bmatrix}1&0\end{bmatrix},\qquad D=0
+```
+
+**MATLAB:** `motor_ss = ss(A,B,C,D)`.
 
 ---
 
-## 5. MATLAB representation and verification
+## 5. MATLAB representation and model conversion
 
-No simulation plots are needed in this phase. The deliverable is a **working numerical model** in both forms and a check that they agree.
+This section needs **no figures, no frequency-response tests, and no numerical assertions**. We simply create the transfer-function and physical state-space models, then convert between them so the two mathematical forms can be inspected in the MATLAB Command Window.
 
-| MATLAB object/command | What it does |
+| MATLAB command | Purpose |
 |:--|:--|
-| `P_motor = ...` using `tf('s')` | Builds the derived voltage-to-speed transfer function |
-| `motor_ss = ss(A,B,C,D)` | Builds a state-space model with **physical** states $[\omega,i]^T$ |
-| `P_from_ss = tf(motor_ss)` | Converts the physical state-space model back into an input–output transfer function |
-| `ss_from_tf = ss(P_motor)` | Creates **an** equivalent realization, which may use different internal state coordinates |
-| `freqresp(...)` and `assert(...)` | Numerically verify both models have the same input–output frequency response at selected frequencies |
+| `P_motor = Kt/((J*s+b)*(L*s+R)+Kt*Ke)` | Create the voltage-to-speed transfer function from the derived equation |
+| `motor_ss = ss(A,B,C,D)` | Create the state-space model using physical states: speed and current |
+| `P_from_ss = tf(motor_ss)` | Convert physical state space to transfer function |
+| `ss_from_tf = ss(P_motor)` | Convert the transfer function to an automatically chosen state-space realization |
 
-> **Important:** `ss(P_motor)` is not guaranteed to produce the same $A,B,C,D$ matrices as the physics-derived state-space model. **Input–output equivalence** does not mean the state coordinates are identical. Our comparison therefore checks their transfer behavior, not entry-by-entry matrix equality.
+> **Important:** `ss(P_motor)` can use a different state-coordinate basis than our physical choice $\mathbf{x}=[\omega, i]^T$. So its matrices may look different even though the input–output transfer function is the same. Similarly, MATLAB may normalize the numerator and denominator by a common factor when displaying a transfer function.
 
-### Run the code
+### Run the MATLAB script
 
-Open `src/dc_motor_modeling.m` in MATLAB, then click **Run**. The script is split into executable `%%` sections:
+Open [`src/dc_motor_modeling.m`](src/dc_motor_modeling.m) in MATLAB and run the file, or run its `%%` sections in order:
 
-1. Define physical parameters.
-2. Build the transfer function.
-3. Build the physical state-space model.
-4. Convert state space → transfer function.
-5. Check numerical equivalence at six angular frequencies, including DC.
-6. Optionally inspect an automatic transfer function → state-space conversion.
+1. **Physical parameters** — define $J$, $b$, $K_t$, $K_e$, $R$, and $L$.
+2. **Transfer function** — calculate `P_motor`.
+3. **State space** — build matrices $A$, $B$, $C$, $D$ and `motor_ss`.
+4. **SS → TF** — create `P_from_ss`.
+5. **TF → SS** — create `ss_from_tf`.
 
-**Expected mathematical results:**
+**Command Window tip:** MATLAB **does not print** an assignment if the line ends with a semicolon (`;`). The script deliberately leaves semicolons **off** the four model-object assignments above, so their results appear in the Command Window. To display $A$ or any other variable, remove its final semicolon yourself.
+
+**Expected modeling values:**
 
 ```text
 P_motor(s) = 0.01 / (0.005*s^2 + 0.06*s + 0.1001)
@@ -260,10 +294,11 @@ A = [-10, 1; -0.02, -2]
 B = [0; 2]
 C = [1, 0]
 D = 0
-PASS: Transfer-function and physical state-space models match.
 ```
 
-The final PASS line is **what the script is designed to report** if the MATLAB assertion succeeds; it is not a claim that MATLAB was run during preparation of this README.
+`P_from_ss` represents the same input–output equation as `P_motor`; it can also appear in normalized form, e.g. `2 / (s^2 + 12*s + 20.02)`.
+
+No plots or PID tuning are part of **System/Modeling**. Those belong to later sections.
 
 ## 6. Modeling conclusions
 
