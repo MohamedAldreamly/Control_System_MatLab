@@ -33,7 +33,7 @@ $$
 Therefore, for a unit reference step,
 
 $$
-e_{ss}(\%)=\left[1-\mathrm{dcgain}(T)\right]\,100.
+e_{ss}(\%)=\left[1-\operatorname{dcgain}(T)\right]\,100.
 $$
 
 This is **not** the same as the open-loop plant DC gain. `stepinfo` measures settling about the final response, so an apparently short settling time does **not** prove acceptable tracking accuracy. The phase-margin and crossover objectives introduced later are **additional engineering design choices**, not values uniquely dictated by the three requirements above.
