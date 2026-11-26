@@ -56,16 +56,16 @@ The specified 2-second settling-time limit gives an approximate boundary at `Re(
 
 ### 3.1 Construct design boundaries before drawing Root Locus
 
-The required **1 rad/s reference-step** performance is settling time \(T_s<2\) s (2% criterion) and maximum overshoot \(M_p<5\%\). Under the *standard second-order approximations*, these define a **region**, rather than one automatically chosen pole pair.
+The required **1 rad/s reference-step** performance is settling time $T_s<2$ s (2% criterion) and maximum overshoot $M_p<5\%$. Under the *standard second-order approximations*, these define a **region**, rather than one automatically chosen pole pair.
 
-**Damping ratio boundary.** From the overshoot equation, at \(M_p=0.05\):
+**Damping ratio boundary.** From the overshoot equation, at $M_p=0.05$:
 
 ```math
 M_p=e^{-\pi\zeta/\sqrt{1-\zeta^2}},\qquad
 \zeta_{\min}=\frac{-\ln(0.05)}{\sqrt{\pi^2+[\ln(0.05)]^2}}\approx0.6901
 ```
 
-The two constant-damping rays begin at the origin and make \(\theta=\cos^{-1}(0.6901)\approx46.36^\circ\) above and below the **negative real axis**. Draw these rays and retain the sector *between* them.
+The two constant-damping rays begin at the origin and make $\theta=\cos^{-1}(0.6901)\approx46.36^\circ$ above and below the **negative real axis**. Draw these rays and retain the sector *between* them.
 
 **Settling-time boundary.**
 
@@ -75,13 +75,13 @@ T_s\approx\frac{4}{\zeta\omega_n}<2
 \quad\Longrightarrow\quad\operatorname{Re}(s)<-2
 ```
 
-Draw a vertical line at \(s=-2\), retaining its **left** side. The allowable region is the **intersection** of this half-plane and the damping sector.
+Draw a vertical line at $s=-2$, retaining its **left** side. The allowable region is the **intersection** of this half-plane and the damping sector.
 
-A constant natural frequency would make a circle centered at the origin because \(\omega_n=|s|=\sqrt{\sigma^2+\omega_d^2}\), but the original requirements do **not** specify an independent constant \(\omega_n\). Do not invent an extra circle-shaped pass/fail boundary.
+A constant natural frequency would make a circle centered at the origin because $\omega_n=|s|=\sqrt{\sigma^2+\omega_d^2}$, but the original requirements do **not** specify an independent constant $\omega_n$. Do not invent an extra circle-shaped pass/fail boundary.
 
 ### 3.2 Construct the uncompensated Root Locus by all eight standard rules
 
-Use the *positive variable gain* \(K\ge0\), unity negative feedback \(H(s)=1\), and the exact plant:
+Use the *positive variable gain* $K\ge0$, unity negative feedback $H(s)=1$, and the exact plant:
 
 ```math
 G(s)=\frac{2}{s^2+12s+20.02}
@@ -94,7 +94,7 @@ s^2+12s+20.02=0\quad\Longrightarrow\quad
 p_{1,2}=-6\pm\sqrt{15.98}
 ```
 
-Hence \(p_1=-2.002500781738663\ldots\), \(p_2=-9.997499218261337\ldots\). There are **no finite zeros**. The exact symbolic roots are preserved instead of rounding them to \(-2,-10\).
+Hence $p_1=-2.002500781738663\ldots$, $p_2=-9.997499218261337\ldots$. There are **no finite zeros**. The exact symbolic roots are preserved instead of rounding them to $-2,-10$.
 
 **Step 2 — Characteristic equation.**
 
@@ -104,50 +104,50 @@ Hence \(p_1=-2.002500781738663\ldots\), \(p_2=-9.997499218261337\ldots\). There 
 D(s,K)=s^2+12s+20.02+2K=0
 ```
 
-The factors \(2K\) and \(20.02\) are essential; using \(K\) alone or \(20\) would analyze a different plant.
+The factors $2K$ and $20.02$ are essential; using $K$ alone or $20$ would analyze a different plant.
 
 **Step 3 — Plot poles and zeros and identify the real-axis locus.** Mark crosses at both real poles. The **odd-number rule** states that a real point is on the positive-gain locus if an odd number of real open-loop poles and zeros lie **to its right**.
 
 | Real-axis interval | Number to its right | Root Locus? |
 | :-- | --: | :-- |
-| \(s<-9.9974992\) | 2 | No |
-| \(-9.9974992<s<-2.0025008\) | 1 | **Yes** |
-| \(s>-2.0025008\) | 0 | No |
+| $s<-9.9974992$ | 2 | No |
+| $-9.9974992<s<-2.0025008$ | 1 | **Yes** |
+| $s>-2.0025008$ | 0 | No |
 
-Thus the pole near \(-10\) travels **right toward the other pole**, not left toward negative infinity. The pole near \(-2\) travels left. They approach one another.
+Thus the pole near $-10$ travels **right toward the other pole**, not left toward negative infinity. The pole near $-2$ travels left. They approach one another.
 
-**Step 4 — Count branches.** There are \(n=2\) poles and \(m=0\) finite zeros, hence **two branches**, both ending at infinity.
+**Step 4 — Count branches.** There are $n=2$ poles and $m=0$ finite zeros, hence **two branches**, both ending at infinity.
 
-**Step 5 — Calculate asymptote angles and centroid.** Index \(i=1,2,\ldots,n-m\):
+**Step 5 — Calculate asymptote angles and centroid.** Index $i=1,2,\ldots,n-m$:
 
 ```math
 \theta_i=\frac{180^\circ+360^\circ(i-1)}{n-m}
 ```
 
-With \(n-m=2\), \(\theta_1=90^\circ\) and \(\theta_2=270^\circ\) (or \(-90^\circ\)). The centroid is:
+With $n-m=2$, $\theta_1=90^\circ$ and $\theta_2=270^\circ$ (or $-90^\circ$). The centroid is:
 
 ```math
 \sigma_a=\frac{\sum p_i-\sum z_i}{n-m}
 =\frac{-12-0}{2}=-6
 ```
 
-The centroid is **exactly** \(-6\), not a rounded result.
+The centroid is **exactly** $-6$, not a rounded result.
 
 **Step 6 — Angles of departure and arrival.** There are no non-real **open-loop poles** or finite zeros requiring separate complex departure/arrival-angle formulas. The real-axis rule fixes initial movement; the two branches separate upward and downward at the breakaway point.
 
-**Step 7 — Routh–Hurwitz and imaginary-axis intersection.** The Routh array of \(D(s,K)\) is:
+**Step 7 — Routh–Hurwitz and imaginary-axis intersection.** The Routh array of $D(s,K)$ is:
 
 | Row | Column 1 | Column 2 |
 | :-- | :-- | :-- |
-| \(s^2\) | \(1\) | \(20.02+2K\) |
-| \(s^1\) | \(12\) | \(0\) |
-| \(s^0\) | \(20.02+2K\) | — |
+| $s^2$ | $1$ | $20.02+2K$ |
+| $s^1$ | $12$ | $0$ |
+| $s^0$ | $20.02+2K$ | — |
 
-All first-column entries are positive for \(K>-10.01\). Therefore **every positive gain is stable** in this ideal second-order model.
+All first-column entries are positive for $K>-10.01$. Therefore **every positive gain is stable** in this ideal second-order model.
 
-The **auxiliary polynomial** method remembered from Routh applies when an **entire row becomes zero**: use the entries in the row just above to form a polynomial, for example \(s^2+20=0\Rightarrow s=\pm j\sqrt{20}\). That situation **does not occur here**, since the \(s^1\) row is \(12\), not zero. Taking the top row \(s^2+(20.02+2K)=0\) as an auxiliary polynomial in this case would be incorrect.
+The **auxiliary polynomial** method remembered from Routh applies when an **entire row becomes zero**: use the entries in the row just above to form a polynomial, for example $s^2+20=0\Rightarrow s=\pm j\sqrt{20}$. That situation **does not occur here**, since the $s^1$ row is $12$, not zero. Taking the top row $s^2+(20.02+2K)=0$ as an auxiliary polynomial in this case would be incorrect.
 
-Check imaginary-axis crossings directly using \(s=j\omega\):
+Check imaginary-axis crossings directly using $s=j\omega$:
 
 ```math
 -\omega^2+12j\omega+20.02+2K=0
@@ -159,7 +159,7 @@ Separate real and imaginary parts:
 -\omega^2+20.02+2K=0,\qquad12\omega=0
 ```
 
-Thus \(\omega=0\), and \(K=-10.01\), which is **outside \(K\ge0\)**. There is no finite imaginary-axis crossing on the positive-gain Root Locus. The branches do not loop back or cross the imaginary axis.
+Thus $\omega=0$, and $K=-10.01$, which is **outside $K\ge0$**. There is no finite imaginary-axis crossing on the positive-gain Root Locus. The branches do not loop back or cross the imaginary axis.
 
 **Step 8 — Breakaway point and its gain.** Solve the characteristic equation for gain and differentiate:
 
@@ -168,7 +168,7 @@ K(s)=-\frac{s^2+12s+20.02}{2},
 \qquad \frac{dK}{ds}=-(s+6)=0
 ```
 
-Therefore the candidate is \(s_b=-6\). It lies **between the two real poles**, on the valid real-axis locus, so it is the actual breakaway. Its gain is:
+Therefore the candidate is $s_b=-6$. It lies **between the two real poles**, on the valid real-axis locus, so it is the actual breakaway. Its gain is:
 
 ```math
 K_b=-\frac{36-72+20.02}{2}=7.99
@@ -180,13 +180,13 @@ The exact closed-loop pole trajectory is:
 s(K)=-6\pm\sqrt{15.98-2K}
 ```
 
-For \(0\le K<7.99\), poles move toward one another **on the real axis**. At \(K=7.99\), they merge at \(-6\); for \(K>7.99\), they are \(s=-6\pm j\sqrt{2K-15.98}\). Therefore both complex branches lie **exactly** on the vertical line \(\operatorname{Re}(s)=-6\).
+For $0\le K<7.99$, poles move toward one another **on the real axis**. At $K=7.99$, they merge at $-6$; for $K>7.99$, they are $s=-6\pm j\sqrt{2K-15.98}$. Therefore both complex branches lie **exactly** on the vertical line $\operatorname{Re}(s)=-6$.
 
 ### 3.3 Complete analytical figure: root locus and permitted region
 
 ![Hand-derived DC motor root locus with poles, breakaway, asymptotes, damping and settling boundaries, and selected closed-loop poles](figures/uncompensated_root_locus_analytical.svg)
 
-**Figure interpretation.** Red crosses = open-loop poles; solid blue paths = the positive-gain locus; blue open circle = breakaway at \(-6\), \(K=7.99\); dashed blue line = asymptotes at \(90^\circ/270^\circ\); green boundary rays = \(\zeta=0.6901\); orange vertical boundary = settling-time limit \(\operatorname{Re}(s)=-2\). Purple squares show a subsequently chosen pair of closed-loop poles. The diagram is calculated from the equations above, **not generated using MATLAB's automated root-locus plotting**.
+**Figure interpretation.** Red crosses = open-loop poles; solid blue paths = the positive-gain locus; blue open circle = breakaway at $-6$, $K=7.99$; dashed blue line = asymptotes at $90^\circ/270^\circ$; green boundary rays = $\zeta=0.6901$; orange vertical boundary = settling-time limit $\operatorname{Re}(s)=-2$. Purple squares show a subsequently chosen pair of closed-loop poles. The diagram is calculated from the equations above, **not generated using MATLAB's automated root-locus plotting**.
 
 ### 3.4 Pick desired poles *after* the region and root locus are drawn
 
@@ -197,7 +197,7 @@ s=-6\pm j\omega_d,\qquad
 \zeta=\frac{6}{\sqrt{36+\omega_d^2}}
 ```
 
-The settling condition is met since \(-6<-2\); the damping boundary requires \(\zeta>0.6901\), giving \(0<\omega_d\lesssim6.29\). This defines an allowable **range**, not a uniquely required point. We select \(\omega_d=2\), and hence:
+The settling condition is met since $-6<-2$; the damping boundary requires $\zeta>0.6901$, giving $0<\omega_d\lesssim6.29$. This defines an allowable **range**, not a uniquely required point. We select $\omega_d=2$, and hence:
 
 ```math
 s_d=-6\pm j2,\quad
@@ -205,13 +205,13 @@ s_d=-6\pm j2,\quad
 \zeta=\frac6{\sqrt{40}}\approx0.9487
 ```
 
-**Angle condition:** \(1+KG(s)H(s)=0\) requires \(KG(s_d)H(s_d)=-1\). For real positive \(K\), the phase of \(G(s_d)H(s_d)\) must equal an **odd multiple of \(180^\circ\)**:
+**Angle condition:** $1+KG(s)H(s)=0$ requires $KG(s_d)H(s_d)=-1$. For real positive $K$, the phase of $G(s_d)H(s_d)$ must equal an **odd multiple of $180^\circ$**:
 
 ```math
 \angle G(s_d)H(s_d)=(2q+1)180^\circ
 ```
 
-Angles are measured from the **positive real axis**. Compute the vectors *from each pole to the proposed point*. For the pole near \(-9.9975\), \(\theta_1=\tan^{-1}(2/3.9974992)\approx26.58^\circ\). For the pole near \(-2.0025\), the vector lies in the **second quadrant**, so \(\theta_2=180^\circ-\tan^{-1}(2/3.9974992)\approx153.42^\circ\). Since there are no zeros:
+Angles are measured from the **positive real axis**. Compute the vectors *from each pole to the proposed point*. For the pole near $-9.9975$, $\theta_1=\tan^{-1}(2/3.9974992)\approx26.58^\circ$. For the pole near $-2.0025$, the vector lies in the **second quadrant**, so $\theta_2=180^\circ-\tan^{-1}(2/3.9974992)\approx153.42^\circ$. Since there are no zeros:
 
 ```math
 \angle G(s_d)=\sum\angle(s_d-z_i)-\sum\angle(s_d-p_i)
@@ -227,21 +227,21 @@ K=\frac{1}{|G(s_d)H(s_d)|}
 =\frac{|s_d^2+12s_d+20.02|}{2}
 ```
 
-Substituting \(s_d=-6+j2\) yields \(s_d^2+12s_d+20.02=-19.98+0j\), so:
+Substituting $s_d=-6+j2$ yields $s_d^2+12s_d+20.02=-19.98+0j$, so:
 
 ```math
 K=\frac{19.98}{2}=9.99
 ```
 
-Do **not** arbitrarily throw away an imaginary part to force \(K\) real; the **angle condition** is why the proposed point yields a real positive gain.
+Do **not** arbitrarily throw away an imaginary part to force $K$ real; the **angle condition** is why the proposed point yields a real positive gain.
 
-The second-order transient indicators are \(T_s\approx4/6=0.667\) s, \(\zeta\approx0.9487\), and \(M_p\approx0.0081\%\). These support transient-region feasibility, while the actual tracking error remains to be evaluated next.
+The second-order transient indicators are $T_s\approx4/6=0.667$ s, $\zeta\approx0.9487$, and $M_p\approx0.0081\%$. These support transient-region feasibility, while the actual tracking error remains to be evaluated next.
 
 ### 3.5 Separate transient feasibility from steady-state tracking
 
 The hand-drawn Root Locus **does pass through the permitted transient region**. Therefore a proportional gain can meet the *transient pole-placement* constraints for this motor. But that does **not** establish full specification compliance.
 
-Section 4 now performs the independent **steady-state tracking-error test**. At \(K=9.99\), \(e_{ss}\approx50.05\%\). Achieving error below \(1\%\) with P gain alone requires \(K>990.99\), which drives the damping too low and violates the overshoot criterion. **The system is still stable for all \(K\ge0\)**; its failure is transient accuracy versus steady-state accuracy, **not instability**. Physical voltage limits and saturation are real implementation concerns but were not checked in this ideal model.
+Section 4 now performs the independent **steady-state tracking-error test**. At $K=9.99$, $e_{ss}\approx50.05\%$. Achieving error below $1\%$ with P gain alone requires $K>990.99$, which drives the damping too low and violates the overshoot criterion. **The system is still stable for all $K\ge0$**; its failure is transient accuracy versus steady-state accuracy, **not instability**. Physical voltage limits and saturation are real implementation concerns but were not checked in this ideal model.
 
 ---
 
