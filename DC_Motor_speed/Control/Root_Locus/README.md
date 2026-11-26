@@ -72,7 +72,7 @@ The two constant-damping rays begin at the origin and make $\theta=\cos^{-1}(0.6
 ```math
 T_s\approx\frac{4}{\zeta\omega_n}<2
 \quad\Longrightarrow\quad \zeta\omega_n>2
-\quad\Longrightarrow\quad\operatorname{Re}(s)<-2
+\quad\Longrightarrow\quad\mathrm{Re}(s)<-2
 ```
 
 Draw a vertical line at $s=-2$, retaining its **left** side. The allowable region is the **intersection** of this half-plane and the damping sector.
@@ -180,13 +180,13 @@ The exact closed-loop pole trajectory is:
 s(K)=-6\pm\sqrt{15.98-2K}
 ```
 
-For $0\le K<7.99$, poles move toward one another **on the real axis**. At $K=7.99$, they merge at $-6$; for $K>7.99$, they are $s=-6\pm j\sqrt{2K-15.98}$. Therefore both complex branches lie **exactly** on the vertical line $\operatorname{Re}(s)=-6$.
+For $0\le K<7.99$, poles move toward one another **on the real axis**. At $K=7.99$, they merge at $-6$; for $K>7.99$, they are $s=-6\pm j\sqrt{2K-15.98}$. Therefore both complex branches lie **exactly** on the vertical line $\mathrm{Re}(s)=-6$.
 
 ### 3.3 Complete analytical figure: root locus and permitted region
 
 ![Hand-derived DC motor root locus with poles, breakaway, asymptotes, damping and settling boundaries, and selected closed-loop poles](figures/uncompensated_root_locus_analytical.svg)
 
-**Figure interpretation.** Red crosses = open-loop poles; solid blue paths = the positive-gain locus; blue open circle = breakaway at $-6$, $K=7.99$; dashed blue line = asymptotes at $90^\circ/270^\circ$; green boundary rays = $\zeta=0.6901$; orange vertical boundary = settling-time limit $\operatorname{Re}(s)=-2$. Purple squares show a subsequently chosen pair of closed-loop poles. The diagram is calculated from the equations above, **not generated using MATLAB's automated root-locus plotting**.
+**Figure interpretation.** Red crosses = open-loop poles; solid blue paths = the positive-gain locus; blue open circle = breakaway at $-6$, $K=7.99$; dashed blue line = asymptotes at $90^\circ/270^\circ$; green boundary rays = $\zeta=0.6901$; orange vertical boundary = settling-time limit $\mathrm{Re}(s)=-2$. Purple squares show a subsequently chosen pair of closed-loop poles. The diagram is calculated from the equations above, **not generated using MATLAB's automated root-locus plotting**.
 
 ### 3.4 Pick desired poles *after* the region and root locus are drawn
 
@@ -197,7 +197,7 @@ s=-6\pm j\omega_d,\qquad
 \zeta=\frac{6}{\sqrt{36+\omega_d^2}}
 ```
 
-The settling condition is met since $-6<-2$; the damping boundary requires $\zeta>0.6901$, giving $0<\omega_d\lesssim6.29$. This defines an allowable **range**, not a uniquely required point. We select $\omega_d=2$, and hence:
+The settling condition is met since $-6<-2$; the damping boundary requires $\zeta>0.6901$, giving $0<\omega_d\le6.29$. This defines an allowable **range**, not a uniquely required point. We select $\omega_d=2$, and hence:
 
 ```math
 s_d=-6\pm j2,\quad
